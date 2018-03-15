@@ -1,9 +1,17 @@
 'use strict';
 
-var expect = require('chai').expect;
-var easing = require('../easing.js');
+const expect = require('chai').expect;
+const m = {};
+let easing; 
 
 describe('easing', () => {
+  
+  before(() => {
+    require('./lib/compile')('./src/easing.js', m).then(() => {
+      easing = m.exports;
+    });
+  });
+
   it('should create easer', () => {
     var easer = easing.createEaser('ease');
 

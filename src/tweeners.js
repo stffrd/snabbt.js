@@ -1,8 +1,9 @@
 "use strict";
 
-const createMatrix = require("./matrix.js");
+import createMatrix from "./matrix.js";
+import prps from "./properties";
 
-import { tweenableProperties as props, types } from "./properties";
+const { tweenableProperties: props, types } = prps;
 
 function createStateTweener(startState, endState, resultState) {
   var start = startState;

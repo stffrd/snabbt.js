@@ -1,4 +1,3 @@
-'use strict';
 
 function assignedMatrixMultiplication(a, b, res) {
   // Unrolled loop
@@ -12,8 +11,8 @@ function assignedMatrixMultiplication(a, b, res) {
   res[6] = a[4] * b[2] + a[5] * b[6] + a[6] * b[10] + a[7] * b[14];
   res[7] = a[4] * b[3] + a[5] * b[7] + a[6] * b[11] + a[7] * b[15];
 
-  res[8] = a[8] * b[0] + a[9] * b[4] + a[10] * b[8] + a[11] * b[12];
-  res[9] = a[8] * b[1] + a[9] * b[5] + a[10] * b[9] + a[11] * b[13];
+  res[8]  = a[8] * b[0] + a[9] * b[4] + a[10] * b[8] + a[11] * b[12];
+  res[9]  = a[8] * b[1] + a[9] * b[5] + a[10] * b[9] + a[11] * b[13];
   res[10] = a[8] * b[2] + a[9] * b[6] + a[10] * b[10] + a[11] * b[14];
   res[11] = a[8] * b[3] + a[9] * b[7] + a[10] * b[11] + a[11] * b[15];
 
@@ -253,5 +252,4 @@ function createMatrix() {
   };
 }
 
-
-module.exports = createMatrix;
+export default createMatrix;

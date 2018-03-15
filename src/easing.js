@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var utils = require('./utils.js');
+import utils from "./utils.js";
 
 function linearEasing(value) {
   return value;
@@ -30,60 +30,63 @@ var createSpringEasing = function(options) {
 
   // Public API
   return {
-    isSpring: true,
-    tick: function(value, isManual) {
-      if (value === 0.0 || isManual)
-        return;
-      if (equilibrium)
-        return;
+    isSpring : true,
+    tick(value, isManual) {
+      if(value === 0.0 || isManual)
+        {return;}
+      if(equilibrium)
+        {return;}
       var springForce = -(position - equilibriumPosition) * springConstant;
       // f = m * a
       // a = f / m
       var a = springForce / mass;
       // s = v * t
       // t = 1 ( for now )
+
       velocity += a;
       position += velocity;
 
       // Deceleration
       velocity *= deceleration;
-      if (Math.abs(position - equilibriumPosition) < 0.001 && Math.abs(velocity) < 0.001) {
+      if(Math.abs(position - equilibriumPosition) < 0.001 && Math.abs(velocity) < 0.001) {
         equilibrium = true;
       }
     },
 
-    resetFrom: function(value) {
+    resetFrom(value) {
       position = value;
       velocity = 0;
     },
 
 
-    getValue: function() {
-      if (equilibrium)
-        return equilibriumPosition;
-      return position;
+    getValue() {
+      if(equilibrium)
+        {return equilibriumPosition;}
+      
+return position;
     },
 
-    completed: function() {
+    completed() {
       return equilibrium;
     }
   };
 };
 
 var EASING_FUNCS = {
-  'linear': linearEasing,
-  'ease': ease,
-  'easeIn': easeIn,
-  'easeOut': easeOut
+  linear    : linearEasing,
+  ease    : ease,
+  easeIn,
+  easeOut : easeOut
 };
 
 
 function createEaser(easerName, options) {
-  if (easerName === 'spring') {
+  if(easerName === "spring") {
     return createSpringEasing(options);
   }
   var easeFunction = easerName;
-  if (!utils.isFunction(easerName)) {
+
+  if(!utils.isFunction(easerName)) {
     easeFunction = EASING_FUNCS[easerName];
   }
 
@@ -93,29 +96,30 @@ function createEaser(easerName, options) {
 
   // Public API
   return {
-    tick: function(v) {
+    tick(v) {
       value = easer(v);
       lastValue = v;
     },
 
-    resetFrom: function() {
+    resetFrom() {
       lastValue = 0;
     },
 
-    getValue: function() {
+    getValue() {
       return value;
     },
 
-    completed: function() {
-      if (lastValue >= 1) {
+    completed() {
+      if(lastValue >= 1) {
         return lastValue;
       }
-      return false;
+      
+return false;
     }
   };
 }
 
-module.exports = {
-  createEaser: createEaser,
-  createSpringEasing: createSpringEasing
+export default {
+  createEaser,
+  createSpringEasing
 };

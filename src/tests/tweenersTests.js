@@ -3,7 +3,10 @@
 var{ expect } = require("chai");
 
 const m = {};
+const n = {};
+
 let tweeners;
+let props;
 
 function createState(props, value) {
   var state = {};
@@ -16,12 +19,17 @@ function createState(props, value) {
 }
 
 describe("tweeners", () => {
-    before(() => {
-        require("./lib/compile")("./src/tweeners.js", m).then(() => {
-            tweeners = m.exports;
-            console.log(m.exports);
-        });
-    });
+  before(() => {
+      require("./lib/compile")("./src/tweeners.js", m).then(() => {
+          tweeners = m.exports;
+          console.log(m.exports);
+      });
+
+      require("./lib/compile")("./src/properties.js", n).then(() => {
+        properties = n.exports;
+        props = n.exports.tweenableProperties;
+      });
+  });
 
   describe("stateTweener", () => {
     it("should tween 3d properties that are present", () => {

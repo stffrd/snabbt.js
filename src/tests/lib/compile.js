@@ -3,7 +3,7 @@ const { rollup } = require("rollup");
 const buble      = require("rollup-plugin-buble");
 
 // Sourced from @tivac's Anthracite repository for converting es2015
-// into commonjs for execution in tests. 
+// into commonjs for execution in tests.
 module.exports = function(input, tgt) {
     tgt.exports = {};
 
