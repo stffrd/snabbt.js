@@ -3,7 +3,8 @@
 const stateFromOptions = require('./state.js').stateFromOptions;
 const Animation = require('./animation.js');
 const createState = require('./state.js').createState;
-const utils = require('./utils.js');
+
+import utils from "./utils.js"
 
 const Engine = {
   runningAnimations: [],
@@ -174,4 +175,4 @@ const Engine = {
   }
 };
 
-module.exports = Engine;
+export default Engine;
