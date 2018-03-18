@@ -1,15 +1,15 @@
-'use strict';
-const utils = require('./utils.js');
-const easing = require('./easing.js');
-const tweeners = require('./tweeners');
-const state = require('./state.js');
+import utils from "./utils.js";
+import easing from "./easing.js";
+import tweeners from "./tweeners.js";
+import state from "./state.js";
 
 function createAnimation(startState, endState, options, transformProperty) {
   const duration = utils.optionOrDefault(options.duration, 500);
 
   const delay = utils.optionOrDefault(options.delay, 0);
-  const easer = easing.createEaser(utils.optionOrDefault(options.easing, 'linear'), options);
+  const easer = easing.createEaser(utils.optionOrDefault(options.easing, "linear"), options);
   const currentState = duration === 0 ? endState.clone() : startState.clone();
+
   currentState.transformOrigin = options.transformOrigin;
   currentState.perspective = options.perspective;
 
@@ -25,7 +25,8 @@ function createAnimation(startState, endState, options, transformProperty) {
 
   let tweener;
   // Setup tweener
-  if (options.valueFeeder) {
+
+  if(options.valueFeeder) {
     tweener = tweeners.createValueFeederTweener(options.valueFeeder,
                                                 startState,
                                                 endState,
@@ -36,12 +37,15 @@ function createAnimation(startState, endState, options, transformProperty) {
 
   // Public api
   return {
-    options: options,
-    endState() { return endState; },
+    options,
+    endState() {
+ return endState;
+},
 
     finish(callback) {
       manual = false;
       var manualDuration = duration * manualValue;
+
       startTime = currentTime - manualDuration;
       manualCallback = callback;
       easer.resetFrom(manualValue);
@@ -51,36 +55,39 @@ function createAnimation(startState, endState, options, transformProperty) {
       manual = false;
       tweener.setReverse();
       var manualDuration = duration * (1 - manualValue);
+
       startTime = currentTime - manualDuration;
       manualCallback = callback;
       easer.resetFrom(manualValue);
     },
 
     tick(time) {
-      if (manual) {
+      if(manual) {
         currentTime = time;
-        return this.updateCurrentTransform();
+        
+return this.updateCurrentTransform();
       }
 
       // If first tick, set startTime
-      if (startTime === -1) {
+      if(startTime === -1) {
         startTime = time;
       }
 
-      if (time - startTime >= delay) {
-        if (!started && options.start) {
+      if(time - startTime >= delay) {
+        if(!started && options.start) {
           options.start();
         }
         started = true;
         currentTime = time - delay;
 
         var curr = Math.min(Math.max(0.0, currentTime - startTime), duration);
+
         easer.tick(duration === 0 ? 1 : curr / duration);
         this.updateCurrentTransform();
-        if (options.update) {
+        if(options.update) {
           options.update(curr / duration);
         }
-        if (this.completed() && manualCallback) {
+        if(this.completed() && manualCallback) {
           manualCallback();
         }
       }
@@ -97,9 +104,11 @@ function createAnimation(startState, endState, options, transformProperty) {
 
     updateCurrentTransform() {
       var tweenValue = easer.getValue();
-      if (manual) {
+
+      if(manual) {
         var value = Math.max(0.00001, manualValue - manualDelayFactor);
-        if (easer.isSpring) {
+
+        if(easer.isSpring) {
           tweenValue = value;
         } else {
           easer.tick(value, true);
@@ -110,16 +119,20 @@ function createAnimation(startState, endState, options, transformProperty) {
     },
 
     completed() {
-      if (startTime === 0)
-        return false;
-      return easer.completed();
+      if(startTime === 0) {
+ return false;
+}
+      
+return easer.completed();
     },
 
     updateElement(element, forceUpdate) {
-      if (!started && !forceUpdate)
-        return;
+      if(!started && !forceUpdate) {
+return;
+}
       var matrix = tweener.asMatrix();
       var properties = tweener.getProperties();
+
       utils.updateElementTransform(element, matrix, transformProperty, properties.perspective, options.staticTransform);
       utils.updateElementProperties(element, properties);
     }
@@ -132,6 +145,7 @@ function createAnimation(startState, endState, options, transformProperty) {
 
 function createAttentionAnimation(options) {
   var movement = options.movement;
+
   options.initialVelocity = 0.1;
   options.equilibriumPosition = 0;
   var spring = easing.createSpringEasing(options);
@@ -142,20 +156,23 @@ function createAttentionAnimation(options) {
   var tweenSkew = movement.skew;
 
   var currentMovement = state.createState({
-    position: tweenPosition ? [0, 0, 0] : undefined,
-    rotation: tweenRotation ? [0, 0, 0] : undefined,
-    rotationPost: tweenRotationPost ? [0, 0, 0] : undefined,
-    scale: tweenScale ? [1, 1] : undefined,
-    skew: tweenSkew ? [0, 0] : undefined
+    position     : tweenPosition ? [ 0, 0, 0 ] : undefined,
+    rotation     : tweenRotation ? [ 0, 0, 0 ] : undefined,
+    rotationPost : tweenRotationPost ? [ 0, 0, 0 ] : undefined,
+    scale        : tweenScale ? [ 1, 1 ] : undefined,
+    skew         : tweenSkew ? [ 0, 0 ] : undefined
   });
 
   // Public API
   return {
-    options() { return options; },
+    options() {
+ return options;
+},
 
     tick() {
-      if (spring.equilibrium)
-        return;
+      if(spring.equilibrium) {
+return;
+}
       spring.tick();
 
       this.updateMovement();
@@ -163,27 +180,28 @@ function createAttentionAnimation(options) {
 
     updateMovement() {
       var value = spring.getValue();
-      if  (tweenPosition) {
+
+      if(tweenPosition) {
         currentMovement.position[0] = movement.position[0] * value;
         currentMovement.position[1] = movement.position[1] * value;
         currentMovement.position[2] = movement.position[2] * value;
       }
-      if (tweenRotation) {
+      if(tweenRotation) {
         currentMovement.rotation[0] = movement.rotation[0] * value;
         currentMovement.rotation[1] = movement.rotation[1] * value;
         currentMovement.rotation[2] = movement.rotation[2] * value;
       }
-      if (tweenRotationPost) {
+      if(tweenRotationPost) {
         currentMovement.rotationPost[0] = movement.rotationPost[0] * value;
         currentMovement.rotationPost[1] = movement.rotationPost[1] * value;
         currentMovement.rotationPost[2] = movement.rotationPost[2] * value;
       }
-      if (tweenScale) {
+      if(tweenScale) {
         currentMovement.scale[0] = 1 + movement.scale[0] * value;
         currentMovement.scale[1] = 1 + movement.scale[1] * value;
       }
 
-      if (tweenSkew) {
+      if(tweenSkew) {
         currentMovement.skew[0] = movement.skew[0] * value;
         currentMovement.skew[1] = movement.skew[1] * value;
       }
@@ -204,7 +222,7 @@ function createAttentionAnimation(options) {
   };
 }
 
-module.exports = {
-  createAnimation: createAnimation,
-  createAttentionAnimation: createAttentionAnimation
+export default {
+  createAnimation,
+  createAttentionAnimation
 };

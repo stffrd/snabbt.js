@@ -22,7 +22,6 @@ describe("tweeners", () => {
   before(() => {
       require("./lib/compile")("./src/tweeners.js", m).then(() => {
           tweeners = m.exports;
-          console.log(m.exports);
       });
 
       require("./lib/compile")("./src/properties.js", n).then(() => {

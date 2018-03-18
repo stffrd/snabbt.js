@@ -44,7 +44,6 @@ describe("state", () => {
   });
 
   it("should assign properties from config", () => {
-    console.log("PROPERTIESrtatate?", state);
     var config = generateRandomConfig(types);
     var generatedState = state.createState(config);
 
@@ -82,36 +81,37 @@ describe("state", () => {
     expect(properties).to.have.property("opacity", 0.5);
   });
 
-  // describe('stateFromOptions', () => {
-  //   it('should create new state with default values', () => {
-  //     var res = state.stateFromOptions({});
+  describe("stateFromOptions", () => {
+    it("should create new state with default values", () => {
+      var res = state.stateFromOptions({});
 
-  //     Object.keys(props).forEach((prop) => {
-  //       var defaultValue = props[prop][1];
-  //       expect(res[prop]).to.eql(defaultValue);
-  //     });
-  //   });
+      Object.keys(props).forEach((prop) => {
+        var defaultValue = props[prop][1];
 
-  //   it('should copy properties from previous state', () => {
-  //     var previousState = state.createState({
-  //       rotation: [1, 1, 1]
-  //     });
-  //     var res = state.stateFromOptions({ position: [2, 2, 2] }, previousState);
+        expect(res[prop]).to.eql(defaultValue);
+      });
+    });
 
-  //     expect(res.rotation).to.eql([1, 1, 1]);
-  //     expect(res.position).to.eql([2, 2, 2]);
-  //   });
+    it("should copy properties from previous state", () => {
+      var previousState = state.createState({
+        rotation : [ 1, 1, 1 ]
+      });
+      var res = state.stateFromOptions({ position : [ 2, 2, 2 ] }, previousState);
 
-  //   it('should overwrite properties from previous state', () => {
-  //     var previousState = state.createState({
-  //       rotation: [1, 1, 1]
-  //     });
-  //     var res = state.stateFromOptions({ rotation: [2, 2, 2] }, previousState);
+      expect(res.rotation).to.eql([ 1, 1, 1 ]);
+      expect(res.position).to.eql([ 2, 2, 2 ]);
+    });
 
-  //     expect(res.rotation).to.eql([2, 2, 2]);
-  //   });
-  // });
+    it("should overwrite properties from previous state", () => {
+      var previousState = state.createState({
+        rotation : [ 1, 1, 1 ]
+      });
+      var res = state.stateFromOptions({ rotation : [ 2, 2, 2 ] }, previousState);
 
-  // describe('asMatrix', () => {
-  // });
+      expect(res.rotation).to.eql([ 2, 2, 2 ]);
+    });
+  });
+
+  describe("asMatrix", () => {
+  });
 });
