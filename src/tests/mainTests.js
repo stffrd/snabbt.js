@@ -1,12 +1,24 @@
 "use strict";
 
 const { expect } = require("chai");
-var snabbt = require("../main.js");
 var sinon = require("sinon");
-var Engine = require("../engine.js");
 
+
+const m = {};
+const n = {};
+
+let Engine;
+let snabbt;
 
 describe("main", () => {
+  before(() => {
+    require("./lib/compile")("./src/main.js", m).then(() => {
+        snabbt = m.exports.default;
+        Engine = m.exports.Engine;
+    });
+  });
+
+
   describe("initialization", () => {
     beforeEach(() => {
       sinon.stub(Engine, "initializeAnimation");

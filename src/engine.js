@@ -15,8 +15,8 @@ const Engine = {
   transformProperty   : "transform",
   rAFScheduled        : false,
   init() {
-    if(typeof window !== undefined) { 
-return; 
+    if(typeof window !== undefined) {
+return;
 }
     const styles = window.getComputedStyle(document.documentElement, "");
     const vendorPrefix = (Array.prototype.slice
@@ -25,15 +25,14 @@ return;
         .match(/-(moz|webkit|ms)-/) || styles.OLink === "" && [ "", "o" ]
       )[1];
 
-    if(vendorPrefix === "webkit")
-      {
+    if(vendorPrefix === "webkit") {
  this.transformProperty = "webkitTransform";
  }
   },
 
   scheduleNextFrame() {
     if(this.rAFScheduled) {
- return; 
+ return;
 }
     this.rAFScheduled = true;
 
@@ -46,27 +45,26 @@ return;
   stepAnimations(time) {
     this.runningAnimations.forEach((runningAnimation) => {
       const element = runningAnimation[0];
-      const animation = runningAnimation[1];
+      const anim = runningAnimation[1];
 
-      this.stepAnimation(element, animation, time);
+      this.stepAnimation(element, anim, time);
     });
 
     this.archiveCompletedAnimations();
 
-    if(this.runningAnimations.length > 0)
-      {
- this.scheduleNextFrame(); 
+    if(this.runningAnimations.length > 0) {
+ this.scheduleNextFrame();
 }
   },
 
-  stepAnimation(element, animation, time) {
-    animation.tick(time);
-    animation.updateElement(element);
+  stepAnimation(element, anim, time) {
+    anim.tick(time);
+    anim.updateElement(element);
   },
 
   archiveCompletedAnimations() {
-    const unFinished = this.runningAnimations.filter((animation) => !animation[1].completed());
-    const finished = this.runningAnimations.filter((animation) => animation[1].completed());
+    const unFinished = this.runningAnimations.filter((anim) => !anim[1].completed());
+    const finished = this.runningAnimations.filter((anim) => anim[1].completed());
 
     const queuedAnimations = this.createQueuedAnimations(finished);
     // Finished and not queued
@@ -75,37 +73,37 @@ return;
     Engine.runningAnimations = unFinished;
 
     // Filter out just finished animation from previously completed
-    this.completedAnimations = this.completedAnimations.filter((animation) => !completed.find((finishedAnimation) => finishedAnimation[0] === animation[0]));
+    this.completedAnimations = this.completedAnimations.filter((anim) => !completed.find((finishedAnimation) => finishedAnimation[0] === anim[0]));
 
     Array.prototype.push.apply(this.completedAnimations, completed);
     Array.prototype.push.apply(this.runningAnimations, queuedAnimations);
 
     // Call complete callback
-    finished.forEach((animation) => {
-      const completeCallback = animation[1].options.complete;
+    finished.forEach((anim) => {
+      const completeCallback = anim[1].options.complete;
 
-      if(completeCallback)
-        { 
-completeCallback(); 
-}
+      if(completeCallback) {
+        completeCallback();
+      }
     });
+    
     this.clearOphanedEndStates();
   },
 
   createQueuedAnimations(finished) {
-    var newAnimations = finished.filter((animation) => {
-      var chainer = animation[2];
+    var newAnimations = finished.filter((anim) => {
+      var chainer = anim[2];
 
       
 return chainer.index < chainer.queue.length;
-    }).map((animation) => {
-      var element = animation[0];
-      var chainer = animation[2];
+    }).map((anim) => {
+      var element = anim[0];
+      var chainer = anim[2];
       var options = chainer.queue[chainer.index];
 
       chainer.index++;
       
-return [ animation[0], this.createAnimation(element, options, animation[1].endState()), chainer ];
+return [ anim[0], this.createAnimation(element, options, anim[1].endState()), chainer ];
     });
 
     return newAnimations;
@@ -131,64 +129,66 @@ return chainer;
     var startState = stateFromOptions(options, previousState, true);
     var endState = stateFromOptions(options, previousState, false);
 
-    this.runningAnimations = this.runningAnimations.filter((animation) => element !== animation[0]);
-    var animation = Animation.createAnimation(startState, endState, options, this.transformProperty);
+    this.runningAnimations = this.runningAnimations.filter((anim) => element !== anim[0]);
+    var anim = Animation.createAnimation(startState, endState, options, this.transformProperty);
 
     
-return animation;
+  return anim;
   },
 
   createAttentionAnimation(element, options) {
     var movement = stateFromOptions(options, createState({}, false));
 
     options.movement = movement;
-    var animation = Animation.createAttentionAnimation(options);
+    var anim = Animation.createAttentionAnimation(options);
 
-    return animation;
+    return anim;
   },
 
   stopAnimation(element) {
-    const stoppedAnimation = this.runningAnimations.filter((animation) => animation[0] === element);
+    const stoppedAnimation = this.runningAnimations.filter((anim) => anim[0] === element);
 
-    this.runningAnimations = this.runningAnimations.filter((animation) => animation[0] !== element);
+    this.runningAnimations = this.runningAnimations.filter((anim) => anim[0] !== element);
     Array.prototype.push.apply(this.completedAnimations, stoppedAnimation);
   },
 
   initializeAnimation(element, arg2, arg3) {
-    let animation;
+    let anim;
 
     if(arg2 === "attention") {
-      animation = this.createAttentionAnimation(element, arg3);
+      anim = this.createAttentionAnimation(element, arg3);
     } else if(arg2 === "stop") {
       return this.stopAnimation(element);
     } else {
-      animation = this.createAnimation(element, arg2);
+      anim = this.createAnimation(element, arg2);
     }
     const chainer = this.createChainer();
 
-    animation.updateElement(element, true);
+    anim.updateElement(element, true);
 
-    this.runningAnimations.push([ element, animation, chainer ]);
+    this.runningAnimations.push([ element, anim, chainer ]);
     this.scheduleNextFrame();
 
-    return arg2.manual ? animation : chainer;
+    return arg2.manual ? anim : chainer;
   },
 
   findCurrentState(element) {
-    var match =  this.runningAnimations.find((animation) => element === animation[0]);
+    var match =  this.runningAnimations.find((anim) => element === anim[0]);
 
     if(match) {
       return match[1].getCurrentState();
     }
-    match =  this.completedAnimations.find((animation) => element === animation[0]);
+    match =  this.completedAnimations.find((anim) => element === anim[0]);
     if(match) {
       return match[1].getCurrentState();
     }
   },
 
   clearOphanedEndStates() {
-    this.completedAnimations = this.completedAnimations.filter((animation) => utils.findUltimateAncestor(animation[0]).body);
+    this.completedAnimations = this.completedAnimations.filter((anim) => utils.findUltimateAncestor(anim[0]).body);
   }
 };
 
 export default Engine;
+
+export { Animation };

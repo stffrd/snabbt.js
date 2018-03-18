@@ -6,6 +6,7 @@ const m = {};
 const n = {};
 
 let tweeners;
+let properties;
 let props;
 
 function createState(props, value) {
