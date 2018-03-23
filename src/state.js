@@ -26,8 +26,8 @@ function createState(config, useDefault) {
         var type = props[property][0];
 
         if(this[property]) {
-clonedConfig[property] = type === types.SCALAR ? this[property] : this[property].slice(0);
- }
+          clonedConfig[property] = type === types.SCALAR ? this[property] : this[property].slice(0);
+        }
       });
 
       return createState(clonedConfig);
@@ -89,7 +89,7 @@ return properties;
 
   Object.keys(props).forEach((property) => {
     if(useDefault) {
-API[property] = utils.optionOrDefault(config[property], props[property][1]);
+API[property] = (config[property] || props[property][1]);
 } else {
 API[property] = config[property];
 }
@@ -104,7 +104,7 @@ function stateFromOptions(options, previousState, useFromPrefix) {
   var propName = useFromPrefix ? fromPrefixed : (p) => p;
 
   Object.keys(props).forEach((key) => {
-    state[key] = utils.optionOrDefault(options[propName(key)], state[key]);
+    state[key] = (options[propName(key)] || state[key]);
     if(state[key] && state[key].slice) {
       state[key] = state[key].slice();
     }

@@ -14,8 +14,10 @@ const existing = {
 // Create an easer
 function create(name, options) {
 	// TODO: Parameter magic.
+	// This function should be replaced at runtime, that's why it throws.
 	let fn = () => {
-		throw new Error("An easing function wasn't found");
+		/* eslint-disable-next-line */
+		console.error("An easing function wasn't found");
 	};
 	
 	// if the easing exists, invoke it.

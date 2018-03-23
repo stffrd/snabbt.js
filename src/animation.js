@@ -5,10 +5,10 @@ import state from "./state.js";
 import element from "./element.js";
 
 function createAnimation(startState, endState, options, transformProperty) {
-  const duration = utils.optionOrDefault(options.duration, 500);
+  const duration = options.duration || 500;
 
-  const delay = utils.optionOrDefault(options.delay, 0);
-  const easer = easing.createEaser(utils.optionOrDefault(options.easing, "linear"), options);
+  const delay = options.delay || 0;
+  const easer = easing.createEaser(options.easing || "linear", options);
   const currentState = duration === 0 ? endState.clone() : startState.clone();
 
   currentState.transformOrigin = options.transformOrigin;

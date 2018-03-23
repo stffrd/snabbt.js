@@ -25,26 +25,4 @@ describe("utils", () => {
       expect(utils.isFunction(fun)).to.not.be.ok;
     });
   });
-
-  describe("updateElementTransform", () => {
-    var matrix;
-
-    beforeEach(() => {
-      matrix = {
-        asCSS() {
-          return "matrix-as-css";
-        }
-      };
-    });
-
-    it("should add perspective before matrix if defined", () => {
-      const element = { style : {} };
-      const perspective = 500;
-      const transformProperty = "transform";
-
-      utils.updateElementTransform(element, matrix, transformProperty, perspective);
-
-      expect(element.style[transformProperty]).to.equal(`perspective(${perspective}px) matrix-as-css`);
-    });
-  });
 });
