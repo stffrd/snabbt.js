@@ -1,6 +1,6 @@
 "use strict";
 
-import utils from "./utils";
+import utilities from "./utils";
 
 const SCALAR = 1;
 const ARRAY_2 = 2;
@@ -24,12 +24,15 @@ var tweenableProperties = {
 
 function preprocessOptions(options, index, len) {
   if(!options) {
- return options;
-}
-  var clone = utils.cloneObject(options);
+    return options;
+  }
 
-  var hasAllDoneCallback = utils.isFunction(options.allDone);
-  var hasCompleteCallback = utils.isFunction(options.complete);
+  const { duplicate, isFunction } = utilities;
+  
+  var clone = duplicate(options);
+
+  var hasAllDoneCallback = isFunction(options.allDone);
+  var hasCompleteCallback = isFunction(options.complete);
 
   if(hasCompleteCallback || hasAllDoneCallback) {
     clone.complete = function() {
@@ -42,22 +45,22 @@ function preprocessOptions(options, index, len) {
     };
   }
 
-  if(utils.isFunction(options.valueFeeder)) {
+  if(isFunction(options.valueFeeder)) {
     clone.valueFeeder = function(i, matrix) {
       return options.valueFeeder(i, matrix, index, len);
     };
   }
-  if(utils.isFunction(options.easing)) {
+  if(isFunction(options.easing)) {
     clone.easing = function(i) {
       return options.easing(i, index, len);
     };
   }
-  if(utils.isFunction(options.start)) {
+  if(isFunction(options.start)) {
     clone.start = function() {
       return options.start(index, len);
     };
   }
-  if(utils.isFunction(options.update)) {
+  if(isFunction(options.update)) {
     clone.update = function(i) {
       return options.update(i, index, len);
     };
@@ -68,10 +71,10 @@ function preprocessOptions(options, index, len) {
   properties.forEach((property) => {
     var fromProperty = fromPrefixed(property);
 
-    if(utils.isFunction(options[property])) {
+    if(isFunction(options[property])) {
       clone[property] = options[property](index, len);
     }
-    if(utils.isFunction(options[fromProperty])) {
+    if(isFunction(options[fromProperty])) {
       clone[fromProperty] = options[fromProperty](index, len);
     }
   });

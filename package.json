@@ -12,11 +12,9 @@
     "snabbt.min.js"
   ],
   "scripts": {
-    "test": "mocha src/**/*Tests.js --harmony",
-    "tdd": "mocha src/**/*Tests.js --harmony --watch",
-    "build": "browserify -s snabbt -t babelify src/main.js -o snabbt.js && uglifyjs --compress --mangle -- snabbt.js > snabbt.min.js",
-    "bannerify": "cat snabbt.js > /tmp/snabbt.js && node banner.js > snabbt.js && cat /tmp/snabbt.js >> snabbt.js && cat snabbt.min.js > /tmp/snabbt.min.js && node banner.js > snabbt.min.js && cat /tmp/snabbt.min.js >> snabbt.min.js",
-    "release": "npm run build && npm run bannerify"
+    "test": "mocha src/**/*.test.js --harmony",
+    "tdd": "mocha src/**/*.test.js --harmony --watch",
+    "build": "rollup --config"
   },
   "repository": {
     "type": "git",
@@ -25,8 +23,6 @@
   "author": "Daniel Lundin",
   "license": "MIT",
   "devDependencies": {
-    "array.prototype.find": "^1.0.0",
-    "babelify": "^6.3.0",
     "chai": "^3.3.0",
     "chai-string": "^1.1.4",
     "mocha": "^2.3.3",
@@ -35,7 +31,6 @@
     "rollup-plugin-buble": "^0.19.2",
     "rollup-plugin-commonjs": "^9.1.0",
     "sinon": "^1.17.1",
-    "uglify": "^0.1.5",
     "watchify": "^3.4.0"
   },
   "spm": {

@@ -182,72 +182,81 @@ function createMatrix() {
     var data = new Float32Array(16);
     var a = new Float32Array(16);
     var b = new Float32Array(16);
+
     assignIdentity(data);
 
     return {
-      data: data,
+      data,
 
-      asCSS: function() {
-        var css = 'matrix3d(';
-        for (var i = 0; i < 15; ++i) {
-          if (Math.abs(data[i]) < 0.0001) {
-            css += '0,';
+      asCSS() {
+        var css = "matrix3d(";
+
+        for(var i = 0; i < 15; ++i) {
+          if(Math.abs(data[i]) < 0.0001) {
+            css += "0,";
            } else {
-             css += data[i].toFixed(10) + ',';
+             css += `${data[i].toFixed(10)},`;
            }
         }
-        if (Math.abs(data[15]) < 0.0001) {
-          css += '0)';
+        if(Math.abs(data[15]) < 0.0001) {
+          css += "0)";
         } else {
-          css += data[15].toFixed(10) + ')';
+          css += `${data[15].toFixed(10)})`;
         }
-        return css;
+        
+return css;
       },
 
-      clear: function() {
+      clear() {
         assignIdentity(data);
       },
 
-      translate: function(x, y, z) {
+      translate(x, y, z) {
         copyArray(data, a);
         assignTranslate(b, x, y, z);
         assignedMatrixMultiplication(a, b, data);
-        return this;
+        
+return this;
       },
 
-      rotateX: function(radians) {
+      rotateX(radians) {
         copyArray(data, a);
         assignRotateX(b, radians);
         assignedMatrixMultiplication(a, b, data);
-        return this;
+        
+return this;
       },
 
-      rotateY: function(radians) {
+      rotateY(radians) {
         copyArray(data, a);
         assignRotateY(b, radians);
         assignedMatrixMultiplication(a, b, data);
-        return this;
+        
+return this;
       },
 
-      rotateZ: function(radians) {
+      rotateZ(radians) {
         copyArray(data, a);
         assignRotateZ(b, radians);
         assignedMatrixMultiplication(a, b, data);
-        return this;
+        
+return this;
       },
 
-      scale: function(x, y) {
+      scale(x, y) {
         copyArray(data, a);
         assignScale(b, x, y);
         assignedMatrixMultiplication(a, b, data);
-        return this;
+        
+return this;
       },
 
-    skew: function(ax, ay) {
+    skew(ax, ay) {
       copyArray(data, a);
       assignSkew(b, ax, ay);
       assignedMatrixMultiplication(a, b, data);
-      return this;
+      
+return this;
     }
   };
 }

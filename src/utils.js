@@ -16,45 +16,38 @@ function updateElementTransform(element, matrix, transformProperty, perspective,
   const cssPerspective = perspective ? `perspective(${perspective}px) ` : "";
   const cssMatrix = matrix.asCSS();
   const cssStaticTransform = staticTransform ? staticTransform : "";
-
+  
   if(transformProperty) {
- element.style[transformProperty] = cssStaticTransform + cssPerspective + cssMatrix;
-} else {
-element.style.transform = cssStaticTransform + cssPerspective + cssMatrix;
-}
+    element.style[transformProperty] = cssStaticTransform + cssPerspective + cssMatrix;
+  } else {
+    element.style.transform = cssStaticTransform + cssPerspective + cssMatrix;
+  }
 }
 
-var updateElementProperties = function(element, properties) {
-  for(var key in properties) {
-    if(key === "perspective") // TODO: Fix this
-      {
- continue;
-}
+const updateElementProperties = function(element, properties) {
+  // Consider: Multiple Object.Assign calls.
+  // Test for perf.
+  
+  for(const key in properties) {
+    if(key === "perspective") {
+      continue;
+    }
     element.style[key] = properties[key];
   }
 };
 
-function cloneObject(object) {
-  if(!object) {
-    return object;
-  }
-  var clone = {};
-
-  for(var key in object) {
-    clone[key] = object[key];
-  }
-  
-return clone;
+function duplicate(object) {
+  return Object.assign(Object.create(null), object);
 }
 
 function findUltimateAncestor(node) {
   var ancestor = node;
-
+  
   while(ancestor.parentNode) {
     ancestor = ancestor.parentNode;
   }
   
-return ancestor;
+  return ancestor;
 }
 
 export default {
@@ -62,6 +55,6 @@ export default {
   updateElementTransform,
   updateElementProperties,
   isFunction,
-  cloneObject,
+  duplicate,
   findUltimateAncestor
 };

@@ -105,4 +105,3 @@ export const sequence = (queue) => {
 
 export { Engine };
 
-Engine.init();
