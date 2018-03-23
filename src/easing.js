@@ -1,6 +1,4 @@
-"use strict";
-
-import createSpringEasing from "./easing/create-spring-easing.js";
+import spring from "./easing/create-spring-easing.js";
 
 var easings = {
 	linear  : (value) => value,
@@ -10,7 +8,7 @@ var easings = {
 };
 
 const existing = {
-	spring : createSpringEasing
+	spring
 };
 
 // Create an easer
@@ -26,10 +24,9 @@ function create(name, options) {
 	}
 
 	// If this is one of the four pre-packaged easings, use that
+	// HARD ASSUMPTION: if easings[name] isn't found, name is a function
 	if(easings[name]) {
-		fn = easings[name];
-	} else if(typeof name === "function") {
-		fn = name;
+		fn = easings[name] ? easings[name] : name;
 	}
 
 	// Assign easer to whatever fn became.
@@ -51,6 +48,6 @@ function create(name, options) {
 }
 
 export default {
-	createEaser : create,
-	createSpringEasing
+	createEaser        : create,
+	createSpringEasing : spring
 };

@@ -2,6 +2,7 @@ import utils from "./utils.js";
 import easing from "./easing.js";
 import tweeners from "./tweeners.js";
 import state from "./state.js";
+import element from "./element.js";
 
 function createAnimation(startState, endState, options, transformProperty) {
   const duration = utils.optionOrDefault(options.duration, 500);
@@ -126,15 +127,15 @@ return this.updateCurrentTransform();
 return easer.completed();
     },
 
-    updateElement(element, forceUpdate) {
+    updateElement(el, forceUpdate) {
       if(!started && !forceUpdate) {
 return;
 }
       var matrix = tweener.asMatrix();
       var properties = tweener.getProperties();
 
-      utils.updateElementTransform(element, matrix, transformProperty, properties.perspective, options.staticTransform);
-      utils.updateElementProperties(element, properties);
+      element.update.transform(el, matrix, transformProperty, properties.perspective, options.staticTransform);
+      element.update.properties(el, properties);
     }
   };
 }

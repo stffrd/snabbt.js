@@ -113,7 +113,6 @@ function stateFromOptions(options, previousState, useFromPrefix) {
   return state;
 }
 
-
 export default {
   createState,
   stateFromOptions

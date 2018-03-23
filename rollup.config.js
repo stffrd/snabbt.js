@@ -1,17 +1,18 @@
-'use strict';
+"use strict";
 
 module.exports = {
-    input: './src/main.js',
+    input : "./src/main.js",
     
-    output: {
-        file: './hud/dist/bundle.js',
-        format: 'iife',
-        name: 'hud',
-        sourcemap: true,
-        banner: '/* eslint-disable */'
+    output : {
+        file      : "./hud/dist/bundle.js",
+        format    : "iife",
+        name      : "hud",
+        sourcemap : true,
+        banner    : "/* eslint-disable */"
     },
 
-    plugins: [
-        require('rollup-plugin-buble')()
+    plugins : [
+        require("rollup-plugin-buble")(),
+        require("rollup-plugin-node-resolve")()
     ]
 };
