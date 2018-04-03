@@ -39,9 +39,10 @@ function createAnimation(startState, endState, options, transformProperty) {
   // Public api
   return {
     options,
+
     endState() {
- return endState;
-},
+      return endState;
+    },
 
     finish(callback) {
       manual = false;
@@ -66,7 +67,7 @@ function createAnimation(startState, endState, options, transformProperty) {
       if(manual) {
         currentTime = time;
         
-return this.updateCurrentTransform();
+        return this.updateCurrentTransform();
       }
 
       // If first tick, set startTime
@@ -208,9 +209,9 @@ return;
       }
     },
 
-    updateElement(element) {
-      utils.updateElementTransform(element, currentMovement.asMatrix());
-      utils.updateElementProperties(element, currentMovement.getProperties());
+    updateElement() {
+      element.update.transform(element, currentMovement.asMatrix());
+      element.update.properties(element, currentMovement.getProperties());
     },
 
     getCurrentState() {

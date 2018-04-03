@@ -11,6 +11,8 @@ const defaults = {
 };
 
 export default function createSpringEasing(options) {
+    options = options || defaults;
+    
     const pos = {
         current     : options.startPosition || 0,
         equilibrium : options.equilibriumPosition || 1
@@ -27,22 +29,25 @@ export default function createSpringEasing(options) {
 
 	// Public API
 	return {
-		isSpring : true,
-		tick(value, isManual) {
-			if(value === 0.0 || isManual) {
+        isSpring : true,
+        
+		tick(value, manual) {
+			if(value === 0.0 || manual) {
 				return;
 			}
 
 			if(equilibrium) {
 				return;
-			}
+            }
+            
+            // force = mass * acceleration
+			// acceleration = force / mass
+			const force = -(pos.current - pos.equilibrium) * spring.constant;
 
-			var force = -(pos.current - pos.equilibrium) * spring.constant;
-			// f = m * a
-			// a = f / m
-			var acceleration = force / spring.mass;
-			// s = v * t
+            // speed = velocity * time
 			// t = 1 ( for now )
+			const acceleration = force / spring.mass;
+
 
 			velocity += acceleration;
 			pos.current += velocity;

@@ -99,15 +99,17 @@ function createValueFeederTweener(valueFeeder, startState, endState, resultState
       var dHeight = end.height - start.height;
       var dOpacity = end.opacity - start.opacity;
 
-      if(end.width !== undefined) {
-      result.width = start.width + tweenValue * dWidth;
-      }
-      if(end.height !== undefined) {
-result.height = start.height + tweenValue * dHeight;
-}
-      if(end.opacity !== undefined) {
-result.opacity = start.opacity + tweenValue * dOpacity;
-}
+        if(end.width !== undefined) {
+            result.width = start.width + tweenValue * dWidth;
+        }
+
+        if(end.height !== undefined) {
+            result.height = start.height + tweenValue * dHeight;
+        }
+        
+        if(end.opacity !== undefined) {
+            result.opacity = start.opacity + tweenValue * dOpacity;
+        }
     },
 
     asMatrix() {

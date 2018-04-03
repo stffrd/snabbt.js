@@ -1,10 +1,12 @@
 import spring from "./easing/create-spring-easing.js";
 
+const { cos, pow, PI } = Math;
+
 var easings = {
 	linear  : (value) => value,
-	ease    : (value) => (Math.cos(value * Math.PI + Math.PI) + 1) / 2,
+	ease    : (value) => (cos(value * PI + PI) + 1) / 2,
 	easeIn  : (value) => value * value,
-	easeOut : (value) => -Math.pow(value - 1, 2) + 1
+	easeOut : (value) => -pow(value - 1, 2) + 1
 };
 
 const existing = {
