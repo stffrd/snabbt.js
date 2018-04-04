@@ -139,7 +139,7 @@ export function scale(matrix, x, y) {
     matrix[15] = 1;
 }
   
-export function initialize(matrix) {
+export function baseline(matrix) {
     matrix[0] = 1;
     matrix[1] = 0;
     matrix[2] = 0;

@@ -4,7 +4,7 @@ import {
     rotatex, rotatey, rotatez,
     skew,
     scale,
-    initialize,
+    baseline,
     copy } from "./matrix/matrix-operations";
 
 const assignedMatrixMultiplication = multiplication;
@@ -14,7 +14,7 @@ const assignRotateY = rotatey;
 const assignRotateZ = rotatez;
 const assignSkew = skew;
 const assignScale = scale;
-const assignIdentity = initialize;
+const assignIdentity = baseline;
 const copyArray = copy;
 
 function createMatrix() {
@@ -27,30 +27,14 @@ function createMatrix() {
     return {
         data,
         
-        refactoredcss() {
-            const prefix = "matrix3d";
-            let matrix;
+        css() {
 
-            for(let i = 0; i < 15; ++i) {}
         },
 
         asCSS() {
-            var css = "matrix3d(";
-            
-            for(var i = 0; i < 15; ++i) {
-            if(Math.abs(data[i]) < 0.0001) {
-                css += "0,";
-            } else {
-                css += `${data[i].toFixed(10)},`;
-            }
-            }
-            if(Math.abs(data[15]) < 0.0001) {
-            css += "0)";
-            } else {
-            css += `${data[15].toFixed(10)})`;
-            }
-            
-            return css;
+            const matrix = data.map((item) => ((item < 0.0001) ? 0 : item.toFixed(10)));
+
+            return `matrix3d(${matrix.join(",")})`;
         },
 
         clear() {
