@@ -1,4 +1,3 @@
-import utils from "../utils.js";
 
 // Shove defaults into this object
 const defaults = {

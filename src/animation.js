@@ -1,4 +1,3 @@
-import utils from "./utils.js";
 import easing from "./easing.js";
 import tweeners from "./tweeners.js";
 import state from "./state.js";
@@ -40,9 +39,7 @@ function createAnimation(startState, endState, options, transformProperty) {
   return {
     options,
 
-    endState() {
-      return endState;
-    },
+    endState : () => endState,
 
     finish(callback) {
       manual = false;
@@ -95,9 +92,7 @@ function createAnimation(startState, endState, options, transformProperty) {
       }
     },
 
-    getCurrentState() {
-      return currentState;
-    },
+    getCurrentState : () => currentState,
 
     setValue(_manualValue) {
       started = true;
@@ -129,14 +124,14 @@ return easer.completed();
     },
 
     updateElement(el, forceUpdate) {
-      if(!started && !forceUpdate) {
-return;
-}
-      var matrix = tweener.asMatrix();
-      var properties = tweener.getProperties();
+        if(!started && !forceUpdate) {
+            return;
+        }
+        var matrix = tweener.asMatrix();
+        var properties = tweener.getProperties();
 
-      element.update.transform(el, matrix, transformProperty, properties.perspective, options.staticTransform);
-      element.update.properties(el, properties);
+        element.update.transform(el, matrix, transformProperty, properties.perspective, options.staticTransform);
+        element.update.properties(el, properties);
     }
   };
 }
@@ -167,60 +162,53 @@ function createAttentionAnimation(options) {
 
   // Public API
   return {
-    options() {
- return options;
-},
+    options : () => options,
 
     tick() {
-      if(spring.equilibrium) {
-return;
-}
-      spring.tick();
+        if(spring.equilibrium) {
+            return;
+        }
+        spring.tick();
 
-      this.updateMovement();
+        this.updateMovement();
     },
 
     updateMovement() {
-      var value = spring.getValue();
+        var value = spring.getValue();
 
-      if(tweenPosition) {
-        currentMovement.position[0] = movement.position[0] * value;
-        currentMovement.position[1] = movement.position[1] * value;
-        currentMovement.position[2] = movement.position[2] * value;
-      }
-      if(tweenRotation) {
-        currentMovement.rotation[0] = movement.rotation[0] * value;
-        currentMovement.rotation[1] = movement.rotation[1] * value;
-        currentMovement.rotation[2] = movement.rotation[2] * value;
-      }
-      if(tweenRotationPost) {
-        currentMovement.rotationPost[0] = movement.rotationPost[0] * value;
-        currentMovement.rotationPost[1] = movement.rotationPost[1] * value;
-        currentMovement.rotationPost[2] = movement.rotationPost[2] * value;
-      }
-      if(tweenScale) {
-        currentMovement.scale[0] = 1 + movement.scale[0] * value;
-        currentMovement.scale[1] = 1 + movement.scale[1] * value;
-      }
+        if(tweenPosition) {
+            currentMovement.position[0] = movement.position[0] * value;
+            currentMovement.position[1] = movement.position[1] * value;
+            currentMovement.position[2] = movement.position[2] * value;
+        }
+        if(tweenRotation) {
+            currentMovement.rotation[0] = movement.rotation[0] * value;
+            currentMovement.rotation[1] = movement.rotation[1] * value;
+            currentMovement.rotation[2] = movement.rotation[2] * value;
+        }
+        if(tweenRotationPost) {
+            currentMovement.rotationPost[0] = movement.rotationPost[0] * value;
+            currentMovement.rotationPost[1] = movement.rotationPost[1] * value;
+            currentMovement.rotationPost[2] = movement.rotationPost[2] * value;
+        }
+        if(tweenScale) {
+            currentMovement.scale[0] = 1 + movement.scale[0] * value;
+            currentMovement.scale[1] = 1 + movement.scale[1] * value;
+        }
 
-      if(tweenSkew) {
-        currentMovement.skew[0] = movement.skew[0] * value;
-        currentMovement.skew[1] = movement.skew[1] * value;
-      }
+        if(tweenSkew) {
+            currentMovement.skew[0] = movement.skew[0] * value;
+            currentMovement.skew[1] = movement.skew[1] * value;
+        }
     },
 
     updateElement() {
-      element.update.transform(element, currentMovement.asMatrix());
-      element.update.properties(element, currentMovement.getProperties());
+        element.update.transform(element, currentMovement.asMatrix());
+        element.update.properties(element, currentMovement.getProperties());
     },
 
-    getCurrentState() {
-      return currentMovement;
-    },
-
-    completed() {
-      return spring.completed();
-    }
+    getCurrentState : () => currentMovement,
+    completed       : () => spring.completed()
   };
 }
 

@@ -24,7 +24,9 @@ var tweenableProperties = {
 
 function preprocessOptions(options, index, len) {
   if(!options) {
-    return options;
+    console.warn("Preprocess Options: Malformed or invalid options passed in!");
+    
+    return;
   }
 
   const { duplicate, isFunction } = utilities;
@@ -34,50 +36,55 @@ function preprocessOptions(options, index, len) {
   var hasAllDoneCallback = isFunction(options.allDone);
   var hasCompleteCallback = isFunction(options.complete);
 
-  if(hasCompleteCallback || hasAllDoneCallback) {
-    clone.complete = function() {
-      if(hasCompleteCallback) {
-        options.complete.call(this, index, len);
-      }
-      if(hasAllDoneCallback && index === len - 1) {
-        options.allDone();
-      }
-    };
-  }
-
-  if(isFunction(options.valueFeeder)) {
-    clone.valueFeeder = function(i, matrix) {
-      return options.valueFeeder(i, matrix, index, len);
-    };
-  }
-  if(isFunction(options.easing)) {
-    clone.easing = function(i) {
-      return options.easing(i, index, len);
-    };
-  }
-  if(isFunction(options.start)) {
-    clone.start = function() {
-      return options.start(index, len);
-    };
-  }
-  if(isFunction(options.update)) {
-    clone.update = function(i) {
-      return options.update(i, index, len);
-    };
-  }
-
-  var properties = Object.keys(tweenableProperties).concat([ "perspective", "transformOrigin", "duration", "delay" ]);
-
-  properties.forEach((property) => {
-    var fromProperty = fromPrefixed(property);
-
-    if(isFunction(options[property])) {
-      clone[property] = options[property](index, len);
+    if(hasCompleteCallback || hasAllDoneCallback) {
+        clone.complete = function() {
+            if(hasCompleteCallback) {
+                options.complete.call(this, index, len);
+            }
+            if(hasAllDoneCallback && index === len - 1) {
+                options.allDone();
+            }
+        };
     }
-    if(isFunction(options[fromProperty])) {
-      clone[fromProperty] = options[fromProperty](index, len);
+
+    if(isFunction(options.valueFeeder)) {
+        clone.valueFeeder = function(i, matrix) {
+            return options.valueFeeder(i, matrix, index, len);
+        };
     }
-  });
+    if(isFunction(options.easing)) {
+        clone.easing = function(i) {
+            return options.easing(i, index, len);
+        };
+    }
+    if(isFunction(options.start)) {
+        clone.start = function() {
+            return options.start(index, len);
+        };
+    }
+    if(isFunction(options.update)) {
+        clone.update = function(i) {
+            return options.update(i, index, len);
+        };
+    }
+
+    var properties = Object.keys(tweenableProperties).concat([
+      "perspective",
+      "transformOrigin",
+      "duration",
+      "delay"
+    ]);
+
+    properties.forEach((property) => {
+        var fromProperty = fromPrefixed(property);
+
+        if(isFunction(options[property])) {
+            clone[property] = options[property](index, len);
+        }
+        if(isFunction(options[fromProperty])) {
+            clone[fromProperty] = options[fromProperty](index, len);
+        }
+    });
 
   return clone;
 }

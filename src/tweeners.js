@@ -58,17 +58,9 @@ function createStateTweener(startState, endState, resultState) {
       });
     },
 
-    asMatrix() {
-      return result.asMatrix();
-    },
-
-    getProperties() {
-      return result.getProperties();
-    },
-
-    result() {
-      return result;
-    },
+    asMatrix      : () => result.asMatrix(),
+    getProperties : () => result.getProperties(),
+    result        : () => result,
 
     setReverse() {
       var oldStart = start;
@@ -89,15 +81,16 @@ function createValueFeederTweener(valueFeeder, startState, endState, resultState
   // Public API
   return {
     tween(tweenValue) {
-      if(reverse) {
- tweenValue = 1 - tweenValue;
-}
-      currentMatrix.clear();
-      currentMatrix = valueFeeder(tweenValue, currentMatrix);
+        if(reverse) {
+            tweenValue = 1 - tweenValue;
+        }
+        
+        currentMatrix.clear();
+        currentMatrix = valueFeeder(tweenValue, currentMatrix);
 
-      var dWidth = end.width - start.width;
-      var dHeight = end.height - start.height;
-      var dOpacity = end.opacity - start.opacity;
+        var dWidth = end.width - start.width;
+        var dHeight = end.height - start.height;
+        var dOpacity = end.opacity - start.opacity;
 
         if(end.width !== undefined) {
             result.width = start.width + tweenValue * dWidth;
@@ -106,7 +99,7 @@ function createValueFeederTweener(valueFeeder, startState, endState, resultState
         if(end.height !== undefined) {
             result.height = start.height + tweenValue * dHeight;
         }
-        
+
         if(end.opacity !== undefined) {
             result.opacity = start.opacity + tweenValue * dOpacity;
         }

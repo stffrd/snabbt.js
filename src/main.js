@@ -9,31 +9,31 @@ const { preprocessOptions } = properties;
 const { updateElementTransform } = utils;
 
 function snabbt(elements, arg2, arg3) {
-  if(!elements.length) {
-    if(typeof arg2 === "string") {
-return Engine.initializeAnimation(elements, arg2, preprocessOptions(arg3, 0, 1));
- }
+    if(!elements.length) {
+        if(typeof arg2 === "string") {
+        return Engine.initializeAnimation(elements, arg2, preprocessOptions(arg3, 0, 1));
+    }
     
-return Engine.initializeAnimation(elements, preprocessOptions(arg2, 0, 1), arg3);
+    return Engine.initializeAnimation(elements, preprocessOptions(arg2, 0, 1), arg3);
   }
 
   var chainers = [];
   var aggregateChainer = {
     snabbt(opts) {
-      var len = chainers.length;
+        var len = chainers.length;
 
-      chainers.forEach((chainer, index) => {
-        chainer.snabbt(preprocessOptions(opts, index, len));
-      });
+        chainers.forEach((chainer, index) => {
+            chainer.snabbt(preprocessOptions(opts, index, len));
+        });
       
-return aggregateChainer;
+        return aggregateChainer;
     },
     setValue(value) {
-      chainers.forEach((chainer) => {
-        chainer.setValue(value);
-      });
+        chainers.forEach((chainer) => {
+            chainer.setValue(value);
+        });
       
-return aggregateChainer;
+        return aggregateChainer;
     },
     finish(callback) {
       chainers.forEach((chainer, index) => {
@@ -97,7 +97,8 @@ export const sequence = (queue) => {
     options.allDone = previousAllDone ? () => {
       previousAllDone(); next();
     } : next;
-        snabbt(element, options);
+        
+    snabbt(element, options);
   };
 
   next();

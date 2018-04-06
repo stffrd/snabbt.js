@@ -138,7 +138,8 @@ export function scale(matrix, x, y) {
     matrix[14] = 0;
     matrix[15] = 1;
 }
-  
+
+// Set an initial state for a matrix
 export function baseline(matrix) {
     matrix[0] = 1;
     matrix[1] = 0;
