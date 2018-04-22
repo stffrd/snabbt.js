@@ -1,12 +1,16 @@
-function _function(fn) {
+export function _function(fn) {
   return typeof fn === "function";
 }
 
-function duplicate(object) {
+export function noop() {
+  return;
+}
+
+export function duplicate(object) {
   return Object.assign(Object.create(null), object);
 }
 
-function ancestor(node) {
+export function ancestor(node) {
   let current = node;
   
   while(current.parentNode) {
@@ -16,8 +20,3 @@ function ancestor(node) {
   return current;
 }
 
-export default {
-  isFunction : _function,
-  duplicate,
-  ancestor
-};

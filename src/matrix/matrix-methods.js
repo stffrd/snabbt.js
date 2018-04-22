@@ -37,7 +37,7 @@ export function rotate(instance, state, radians) {
 
     if(z) {
         overwrite(state.result, state.current);
-        mrx(state.multiplier, z);
+        mrz(state.multiplier, z);
         multiplication(state.current, state.multiplier, state.result);
     }
     
@@ -58,4 +58,10 @@ export function skew(instance, state, [ ax, ay ]) {
     multiplication(state.current, state.multiplier, state.result);
     
     return instance;
+}
+
+export function css(matrix) {
+    const m = matrix.map((item) => ((item < 0.0001) ? 0 : item.toFixed(10)));
+
+    return `matrix3d(${m.join(",")})`;
 }

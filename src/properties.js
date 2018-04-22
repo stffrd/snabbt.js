@@ -1,6 +1,6 @@
 "use strict";
 
-import utilities from "./utils";
+import { duplicate, _function as isFunction } from "./utils";
 
 const SCALAR = 1;
 const ARRAY_2 = 2;
@@ -28,13 +28,11 @@ function preprocessOptions(options, index, len) {
     
     return;
   }
-
-  const { duplicate, isFunction } = utilities;
   
-  var clone = duplicate(options);
+  const clone = duplicate(options);
 
-  var hasAllDoneCallback = isFunction(options.allDone);
-  var hasCompleteCallback = isFunction(options.complete);
+  const hasAllDoneCallback = isFunction(options.allDone);
+  const hasCompleteCallback = isFunction(options.complete);
 
     if(hasCompleteCallback || hasAllDoneCallback) {
         clone.complete = function() {

@@ -4,11 +4,12 @@ const { expect } = require("chai");
 const m = {};
 
 let utils;
+let fn;
 
 describe("utils", () => {
   before(() => {
     require("./lib/compile")("./src/utils.js", m).then(() => {
-      utils = m.exports;
+      fn = m.exports._function;
     });
   });
 
@@ -16,13 +17,13 @@ describe("utils", () => {
     it("should return true for function", () => {
       var fun = () => {};
 
-      expect(utils.isFunction(fun)).to.be.ok;
+      expect(fn(fun)).to.be.ok;
     });
 
     it("should return false for non-function", () => {
       var fun = "[Function]";
 
-      expect(utils.isFunction(fun)).to.not.be.ok;
+      expect(fn(fun)).to.not.be.ok;
     });
   });
 });

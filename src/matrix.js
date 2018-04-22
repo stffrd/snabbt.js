@@ -1,11 +1,14 @@
-import {
-    multiplication,
-    skew,
-    scale,
-    baseline,
-    overwrite } from "./matrix/matrix-array-assignments.js";
+import { baseline } from "./matrix/matrix-array-assignments.js";
 
-import { rotate as _rotate, translate as _translate } from "./matrix/matrix-methods.js";
+import {
+    css as _css,
+
+    rotate as _rotate,
+    translate as _translate,
+    scale as _scale,
+    skew as _skew
+} from "./matrix/matrix-methods.js";
+
 
 function create() {
     const state = {
@@ -19,12 +22,7 @@ function create() {
     return {
         data : state.result,
 
-        css() {
-            const matrix = state.result.map((item) => ((item < 0.0001) ? 0 : item.toFixed(10)));
-
-            return `matrix3d(${matrix.join(",")})`;
-        },
-
+        css   : () => _css(state.result),
         clear : () => baseline(state.result),
 
         translate(x, y, z) {
@@ -44,16 +42,11 @@ function create() {
         },
 
         scale(x, y) {
-            // return _scale(this, state[ x, y ]);
+            return _scale(this, state, [ x, y ]);
         },
-        
 
         skew(ax, ay) {
-            overwrite(state.result, state.current);
-            skew(state.multiplier, ax, ay);
-            multiplication(state.current, state.multiplier, state.result);
-            
-            return this;
+            return _skew(this, state, [ ax, ay ]);
         }
     };
 }

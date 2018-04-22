@@ -3,7 +3,7 @@
 
 import state from "./state.js";
 import animation from "./animation.js";
-import utils from "./utils.js";
+import { ancestor } from "./utils.js";
 
 const { stateFromOptions, createState } = state;
 
@@ -97,7 +97,7 @@ const Engine = {
         });
 
         return newAnimations;
-  },
+    },
 
     createChainer() {
         var chainer = {
@@ -185,7 +185,7 @@ const Engine = {
 
   clearOphanedEndStates() {
     //
-    this.completedAnimations = this.completedAnimations.filter((anim) => utils.ancestor(anim[0]).body);
+    this.completedAnimations = this.completedAnimations.filter((anim) => ancestor(anim[0]).body);
   }
 };
 
