@@ -1,91 +1,61 @@
 import {
     multiplication,
-    translate,
-    rotatex, rotatey, rotatez,
     skew,
     scale,
     baseline,
-    copy } from "./matrix/matrix-operations";
+    overwrite } from "./matrix/matrix-array-assignments.js";
 
-const assignedMatrixMultiplication = multiplication;
-const assignTranslate = translate;
-const assignRotateX = rotatex;
-const assignRotateY = rotatey;
-const assignRotateZ = rotatez;
-const assignSkew = skew;
-const assignScale = scale;
-const assignIdentity = baseline;
-const copyArray = copy;
+import { rotate as _rotate, translate as _translate } from "./matrix/matrix-methods.js";
 
-function createMatrix() {
-    const data = new Float32Array(16);
-
+function create() {
     const state = {
         current    : new Float32Array(16),
-        multiplier : new Float32Array(16)
+        multiplier : new Float32Array(16),
+        result     : new Float32Array(16)
     };
 
-    baseline(data);
+    baseline(state.result);
 
     return {
-        data,
+        data : state.result,
 
-        asCSS() {
-            const matrix = data.map((item) => ((item < 0.0001) ? 0 : item.toFixed(10)));
+        css() {
+            const matrix = state.result.map((item) => ((item < 0.0001) ? 0 : item.toFixed(10)));
 
             return `matrix3d(${matrix.join(",")})`;
         },
 
-        clear : () => baseline(data),
+        clear : () => baseline(state.result),
 
         translate(x, y, z) {
-            copyArray(data, state.current);
-            assignTranslate(state.multiplier, x, y, z);
-            assignedMatrixMultiplication(state.current, state.multiplier, data);
-            
-            return this;
+            return _translate(this, state, [ x, y, z ]);
         },
 
         rotateX(radians) {
-            copyArray(data, state.current);
-            assignRotateX(state.multiplier, radians);
-            assignedMatrixMultiplication(state.current, state.multiplier, data);
-            
-            return this;
+            return _rotate(this, state, [ radians, null, null ]);
         },
 
         rotateY(radians) {
-            copyArray(data, state.current);
-            assignRotateY(state.multiplier, radians);
-            assignedMatrixMultiplication(state.current, state.multiplier, data);
-            
-            return this;
+            return _rotate(this, state, [ null, radians, null ]);
         },
 
         rotateZ(radians) {
-            copyArray(data, state.current);
-            assignRotateZ(state.multiplier, radians);
-            assignedMatrixMultiplication(state.current, state.multiplier, data);
-            
-            return this;
+            return _rotate(this, state, [ null, null, radians ]);
         },
 
         scale(x, y) {
-            copyArray(data, state.current);
-            assignScale(state.multiplier, x, y);
-            assignedMatrixMultiplication(state.current, state.multiplier, data);
-            
-            return this;
+            // return _scale(this, state[ x, y ]);
         },
+        
 
         skew(ax, ay) {
-            copyArray(data, state.current);
-            assignSkew(state.multiplier, ax, ay);
-            assignedMatrixMultiplication(state.current, state.multiplier, data);
+            overwrite(state.result, state.current);
+            skew(state.multiplier, ax, ay);
+            multiplication(state.current, state.multiplier, state.result);
             
             return this;
         }
-  };
+    };
 }
 
-export default createMatrix;
+export default create;

@@ -2,7 +2,7 @@
 function transform(element, matrix, property, perspective, transform) {
     const css = {
         perspective : perspective ? `perspective(${perspective}px) ` : "",
-        matrix      : matrix.asCSS(),
+        matrix      : matrix.css(),
         transform   : transform ? transform : ""
     };
 

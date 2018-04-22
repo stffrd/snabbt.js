@@ -159,7 +159,7 @@ export function baseline(matrix) {
     matrix[15] = 1;
 }
   
-export function copy(a, b) {
+export function overwrite(a, b) {
     b[0] = a[0];
     b[1] = a[1];
     b[2] = a[2];

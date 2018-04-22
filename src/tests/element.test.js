@@ -17,7 +17,7 @@ describe("element", () => {
 
     beforeEach(() => {
       matrix = {
-        asCSS() {
+        css() {
           return "matrix-as-css";
         }
       };

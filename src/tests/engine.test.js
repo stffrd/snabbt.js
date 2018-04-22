@@ -45,14 +45,14 @@ describe("Engine", (done) => {
   });
 
   beforeEach(() => {
-    const ultimateAncestor = {
+    const root = {
       body : "body"
     };
 
-    sinon.stub(utils, "findUltimateAncestor").returns(ultimateAncestor);
+    sinon.stub(utils, "ancestor").returns(root);
   });
 
-  afterEach(() => utils.findUltimateAncestor.restore());
+  afterEach(() => utils.ancestor.restore());
 
   describe("createAnimation", () => {
     it("needs tests");

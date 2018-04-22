@@ -6,7 +6,7 @@ function duplicate(object) {
   return Object.assign(Object.create(null), object);
 }
 
-function findUltimateAncestor(node) {
+function ancestor(node) {
   let current = node;
   
   while(current.parentNode) {
@@ -19,5 +19,5 @@ function findUltimateAncestor(node) {
 export default {
   isFunction : _function,
   duplicate,
-  findUltimateAncestor
+  ancestor
 };

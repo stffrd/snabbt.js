@@ -185,7 +185,7 @@ const Engine = {
 
   clearOphanedEndStates() {
     //
-    this.completedAnimations = this.completedAnimations.filter((anim) => utils.findUltimateAncestor(anim[0]).body);
+    this.completedAnimations = this.completedAnimations.filter((anim) => utils.ancestor(anim[0]).body);
   }
 };
 
