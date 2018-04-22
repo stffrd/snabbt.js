@@ -265,28 +265,5 @@ describe("Engine", (done) => {
       expect(Engine.runningAnimations).to.have.length(0);
       expect(Engine.completedAnimations).to.have.length(1);
     });
-
-    describe("attention animations", () => {
-      beforeEach(() => {
-        sinon.stub(Animation, "createAttentionAnimation").returns({
-          updateElement() {}
-        });
-      });
-
-      afterEach(() => {
-        Animation.createAttentionAnimation.restore();
-      });
-
-      it("should create attention animation", () =>
-        // const element = { style : {} };
-        // const options = {};
-
-        // Engine.initializeAnimation(element, "attention", options);
-
-        // sinon.assert.calledOnce(Animation.createAttentionAnimation);
-        // sinon.assert.calledWith(Animation.createAttentionAnimation, options);
-         true
-      );
-    });
   });
 });
