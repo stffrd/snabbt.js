@@ -1,13 +1,5 @@
 import { baseline } from "./matrix/matrix-array-assignments.js";
-
-import {
-    css as _css,
-
-    rotate as _rotate,
-    translate as _translate,
-    scale as _scale,
-    skew as _skew
-} from "./matrix/matrix-methods.js";
+import { css as _css } from "./matrix/matrix-methods.js";
 
 
 function create() {
@@ -17,37 +9,14 @@ function create() {
         result     : new Float32Array(16)
     };
 
+    // Baseline it so it starts with default matrix values.
     baseline(state.result);
 
     return {
-        data : state.result,
-
+        state,
+        
         css   : () => _css(state.result),
         clear : () => baseline(state.result),
-
-        translate(x, y, z) {
-            return _translate(this, state, [ x, y, z ]);
-        },
-
-        rotateX(radians) {
-            return _rotate(this, state, [ radians, null, null ]);
-        },
-
-        rotateY(radians) {
-            return _rotate(this, state, [ null, radians, null ]);
-        },
-
-        rotateZ(radians) {
-            return _rotate(this, state, [ null, null, radians ]);
-        },
-
-        scale(x, y) {
-            return _scale(this, state, [ x, y ]);
-        },
-
-        skew(ax, ay) {
-            return _skew(this, state, [ ax, ay ]);
-        }
     };
 }
 

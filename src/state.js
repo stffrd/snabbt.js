@@ -3,7 +3,8 @@
 import createMatrix from "./matrix.js";
 import prp from "./properties.js";
 
-import utils from "./utils.js";
+import { translate, rotate, scale, skew } from "./matrix/matrix-methods";
+
 
 const { fromPrefixed, types, tweenableProperties:props } = prp;
 
@@ -47,39 +48,35 @@ function createState(config, useDefault) {
             m.clear();
 
             if(this.transformOrigin) {
-                m.translate(-this.transformOrigin[0], -this.transformOrigin[1], -this.transformOrigin[2]);
+                translate(m, [ -this.transformOrigin[0], -this.transformOrigin[1], -this.transformOrigin[2] ]);
             }
 
             if(this.scale) {
-                m.scale(this.scale[0], this.scale[1]);
+                scale(m, this.scale);
             }
 
             if(this.skew) {
-                m.skew(this.skew[0], this.skew[1]);
+                skew(m, this.skew);
             }
 
             if(this.rotation) {
-                m.rotateX(this.rotation[0]);
-                m.rotateY(this.rotation[1]);
-                m.rotateZ(this.rotation[2]);
+                rotate(m, this.rotation);
             }
 
             if(this.position) {
-                m.translate(this.position[0], this.position[1], this.position[2]);
+                translate(m, [ this.position[0], this.position[1], this.position[2] ]);
             }
 
             if(this.rotationPost) {
-                m.rotateX(this.rotationPost[0]);
-                m.rotateY(this.rotationPost[1]);
-                m.rotateZ(this.rotationPost[2]);
+                rotate(m, this.rotationPost);
             }
 
             if(this.scalePost) {
-                m.scale(this.scalePost[0], this.scalePost[1]);
+                scale(m, this.scalePost);
             }
 
             if(this.transformOrigin) {
-                m.translate(this.transformOrigin[0], this.transformOrigin[1], this.transformOrigin[2]);
+                translate(m, [ this.transformOrigin[0], this.transformOrigin[1], this.transformOrigin[2] ]);
             }
         
             return m;

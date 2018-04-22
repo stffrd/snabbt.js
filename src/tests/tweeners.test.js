@@ -4,10 +4,12 @@ var{ expect } = require("chai");
 
 const m = {};
 const n = {};
+const o = {};
 
 let tweeners;
 let properties;
 let props;
+let translate;
 
 function createState(props, value) {
   var state = {};
@@ -28,6 +30,10 @@ describe("tweeners", () => {
       require("./lib/compile")("./src/properties.js", n).then(() => {
         properties = n.exports;
         props = n.exports.tweenableProperties;
+      });
+
+      require("./lib/compile")("./src/matrix/matrix-methods.js", o).then(() => {
+        translate = o.exports.translate;
       });
   });
 
@@ -79,7 +85,7 @@ describe("tweeners", () => {
     it("should update currentMatrix with return value from valueFeeder", () => {
       let savedMatrix;
       const valueFeeder = (tweenValue, matrix) => {
-        savedMatrix = matrix.translate(100, 100, 100);
+        savedMatrix = translate(matrix, [ 100, 100, 100 ]);
         
         return savedMatrix;
       };

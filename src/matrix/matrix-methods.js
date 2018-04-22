@@ -11,16 +11,22 @@ import {
     overwrite
 } from "./matrix-array-assignments.js";
 
+// Take a matrix state and modify the parts that correspond to translates
+export function translate(matrix, [ x, y, z ]) {
+    const { state } = matrix;
 
-export function translate(instance, state, [ x, y, z ]) {
     overwrite(state.result, state.current);
     mtranslate(state.multiplier, x, y, z);
     multiplication(state.current, state.multiplier, state.result);
-    
-    return instance;
+
+    return matrix;
 }
 
-export function rotate(instance, state, radians) {
+// Take a matrix state and modify the parts that correspond to rotates
+// this function processes x, y, z sequentially
+export function rotate(matrix, radians) {
+    const { state } = matrix;
+
     const [ x, y, z ] = radians;
     
     if(x) {
@@ -40,26 +46,33 @@ export function rotate(instance, state, radians) {
         mrz(state.multiplier, z);
         multiplication(state.current, state.multiplier, state.result);
     }
-    
-    return instance;
+
+    return matrix;
 }
 
-export function scale(instance, state, [ x, y ]) {
+// Take a matrix state and modify the parts that correspond to scaling
+export function scale(matrix, [ x, y ]) {
+    const { state } = matrix;
+
     overwrite(state.result, state.current);
     mscale(state.multiplier, x, y);
     multiplication(state.current, state.multiplier, state.result);
-    
-    return instance;
+
+    return matrix;
 }
 
-export function skew(instance, state, [ ax, ay ]) {
+// Take a matrix state and modify the parts that correspond to skewing
+export function skew(matrix, [ ax, ay ]) {
+    const { state } = matrix;
+
     overwrite(state.result, state.current);
     mskew(state.multiplier, ax, ay);
     multiplication(state.current, state.multiplier, state.result);
-    
-    return instance;
+
+    return matrix;
 }
 
+// Turn a matrix into CSS
 export function css(matrix) {
     const m = matrix.map((item) => ((item < 0.0001) ? 0 : item.toFixed(10)));
 

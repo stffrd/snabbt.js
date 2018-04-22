@@ -1,5 +1,4 @@
 "use strict";
-/* global document, window */
 
 import state from "./state.js";
 import animation from "./animation.js";
@@ -32,8 +31,7 @@ const Engine = {
 
     stepAnimations(time) {
         this.runningAnimations.forEach((runningAnimation) => {
-            const element = runningAnimation[0];
-            const anim = runningAnimation[1];
+            const [ element, anim ] = runningAnimation;
 
             this.stepAnimation(element, anim, time);
         });
@@ -87,8 +85,8 @@ const Engine = {
             return chainer.index < chainer.queue.length;
         })
         .map((anim) => {
-            var element = anim[0];
-            var chainer = anim[2];
+            const [ element, , chainer ] = anim;
+
             var options = chainer.queue[chainer.index];
 
             chainer.index++;
@@ -115,22 +113,22 @@ const Engine = {
     },
 
   createAnimation(element, options, previousEndState) {
-    var previousState = previousEndState || this.findCurrentState(element);
-    var startState = stateFromOptions(options, previousState, true);
-    var endState = stateFromOptions(options, previousState, false);
+        const previousState = previousEndState || this.findCurrentState(element);
+        const startState = stateFromOptions(options, previousState, true);
+        const endState = stateFromOptions(options, previousState, false);
 
-    this.runningAnimations = this.runningAnimations.filter((anim) => element !== anim[0]);
-    var anim = Animation.createAnimation(startState, endState, options, this.transformProperty);
+        this.runningAnimations = this.runningAnimations.filter((anim) => element !== anim[0]);
+        const anim = Animation.createAnimation(startState, endState, options, this.transformProperty);
 
-    
-    return anim;
+        
+        return anim;
   },
 
   createAttentionAnimation(element, options) {
-    var movement = stateFromOptions(options, createState({}, false));
+    const movement = stateFromOptions(options, createState({}, false));
 
     options.movement = movement;
-    var anim = Animation.createAttentionAnimation(options);
+    const anim = Animation.createAttentionAnimation(options);
 
     return anim;
   },
@@ -172,7 +170,7 @@ const Engine = {
     },
 
     findCurrentState(element) {
-        var match =  this.runningAnimations.find((anim) => element === anim[0]);
+        let match =  this.runningAnimations.find((anim) => element === anim[0]);
 
         if(match) {
         return match[1].getCurrentState();
@@ -183,10 +181,9 @@ const Engine = {
         }
     },
 
-  clearOphanedEndStates() {
-    //
-    this.completedAnimations = this.completedAnimations.filter((anim) => ancestor(anim[0]).body);
-  }
+    clearOphanedEndStates() {
+        this.completedAnimations = this.completedAnimations.filter((anim) => ancestor(anim[0]).body);
+    }
 };
 
 export default Engine;

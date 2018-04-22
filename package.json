@@ -12,8 +12,8 @@
     "snabbt.min.js"
   ],
   "scripts": {
-    "test": "mocha src/**/*.test.js --harmony",
-    "tdd": "mocha src/**/*.test.js --harmony --watch",
+    "test": "mocha src/**/*.test.js",
+    "tdd": "mocha src/**/*.test.js --compilers js:buble/register --harmony --watch",
     "build": "rollup --config"
   },
   "repository": {
@@ -25,6 +25,7 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "chai-string": "^1.1.4",
+    "jest": "^22.4.3",
     "mocha": "^2.3.3",
     "moment": "^2.10.6",
     "rollup": "^0.57.1",
