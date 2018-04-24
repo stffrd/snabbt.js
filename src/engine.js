@@ -124,15 +124,6 @@ const Engine = {
         return anim;
   },
 
-  createAttentionAnimation(element, options) {
-    const movement = stateFromOptions(options, createState({}, false));
-
-    options.movement = movement;
-    const anim = Animation.createAttentionAnimation(options);
-
-    return anim;
-  },
-
     stopAnimation(element) {
         const stoppedAnimation = this.runningAnimations.filter((anim) => anim[0] === element);
 
@@ -140,25 +131,14 @@ const Engine = {
         Array.prototype.push.apply(this.completedAnimations, stoppedAnimation);
     },
 
-    initializeAnimation(element, arg2 = "default", arg3) {
+    initializeAnimation(element, arg2, arg3) {
         let anim;
-        
-        // const types = {
-        //     attention : (element, two, three) => this.createAttentionAnimation(element, three),
-        //     stop      : (element, two, three) => this.stopAnimation(element),
-        //     default   : (element, two, three) => this.createAttentionAnimation(element, three)
-        // };
 
-       // anim = types[arg2]();
-
-       
-        if(arg2 === "attention") {
-            anim = this.createAttentionAnimation(element, arg3);
-        } else if(arg2 === "stop") {
+        if(arg2 === "stop") {
             return this.stopAnimation(element);
-        } else {
-            anim = this.createAnimation(element, arg2);
         }
+            anim = this.createAnimation(element, arg2);
+        
         const chainer = this.createChainer();
 
         anim.updateElement(element, true);

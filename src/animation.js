@@ -1,39 +1,49 @@
 import easing from "./easing.js";
 import tweeners from "./tweeners.js";
-import state from "./state.js";
 import element from "./element.js";
 
 function createAnimation(startState, endState, options, transformProperty) {
-  const duration = options.duration || 500;
+    const state = {
+        current : null,
+        start   : startState,
+        end     : endState
+    };
 
-  const delay = options.delay || 0;
-  const easer = easing.createEaser(options.easing || "linear", options);
-  const currentState = duration === 0 ? endState.clone() : startState.clone();
+    const { duration = 500, delay = 0 } = options;
+    const easer = easing.createEaser(options.easing || "linear", options);
 
-  currentState.transformOrigin = options.transformOrigin;
-  currentState.perspective = options.perspective;
+    // If there's no duration, our current state is literally the end state.
+    state.current = !duration ? state.end.clone() : state.start.clone();
 
-  let startTime = -1;
-  let currentTime = 0;
-  let started = false;
+    state.current.transformOrigin = options.transformOrigin;
+    state.current.perspective = options.perspective;
 
-  // Manual related
-  const manualDelayFactor = delay / duration;
-  let manual = options.manual;
-  let manualValue = 0;
-  let manualCallback;
+    const timespan = {
+        start   : -1,
+        current : 0
+    };
 
-  let tweener;
-  // Setup tweener
+    let startTime = -1;
+    let currentTime = 0;
+    let started = false;
 
-  if(options.valueFeeder) {
-    tweener = tweeners.createValueFeederTweener(options.valueFeeder,
-                                                startState,
-                                                endState,
-                                                currentState);
-  } else {
-    tweener = tweeners.createStateTweener(startState, endState, currentState);
-  }
+    // Manual related
+    const manualDelayFactor = delay / duration;
+    let manual = options.manual;
+    let manualValue = 0;
+    let manualCallback;
+
+    let tweener;
+
+    // Setup tweener
+    if(options.valueFeeder) {
+      tweener = tweeners.createValueFeederTweener(options.valueFeeder,
+                                                  state.start,
+                                                  state.end,
+                                                  state.current);
+    } else {
+      tweener = tweeners.createStateTweener(state.start, state.end, state.current);
+    }
 
   // Public api
   return {
@@ -42,54 +52,56 @@ function createAnimation(startState, endState, options, transformProperty) {
     endState : () => endState,
 
     finish(callback) {
-      manual = false;
-      var manualDuration = duration * manualValue;
+        manual = false;
+        const manualDuration = duration * manualValue;
 
-      startTime = currentTime - manualDuration;
-      manualCallback = callback;
-      easer.resetFrom(manualValue);
+        timespan.start = timespan.current - manualDuration;
+        manualCallback = callback;
+        easer.resetFrom(manualValue);
     },
 
     rollback(callback) {
-      manual = false;
-      tweener.setReverse();
-      var manualDuration = duration * (1 - manualValue);
+        manual = false;
+        tweener.setReverse();
+        const manualDuration = duration * (1 - manualValue);
 
-      startTime = currentTime - manualDuration;
-      manualCallback = callback;
-      easer.resetFrom(manualValue);
+        timespan.start = timespan.current - manualDuration;
+        manualCallback = callback;
+        easer.resetFrom(manualValue);
     },
 
     tick(time) {
-      if(manual) {
-        currentTime = time;
-        
-        return this.updateCurrentTransform();
-      }
-
-      // If first tick, set startTime
-      if(startTime === -1) {
-        startTime = time;
-      }
-
-      if(time - startTime >= delay) {
-        if(!started && options.start) {
-          options.start();
+        if(manual) {
+            currentTime = time;
+            
+            return this.updateCurrentTransform();
         }
-        started = true;
-        currentTime = time - delay;
 
-        var curr = Math.min(Math.max(0.0, currentTime - startTime), duration);
+        // If first tick, set startTime
+        if(startTime === -1) {
+            startTime = time;
+        }
 
-        easer.tick(duration === 0 ? 1 : curr / duration);
-        this.updateCurrentTransform();
-        if(options.update) {
-          options.update(curr / duration);
+        if(time - startTime >= delay) {
+            if(!started && options.start) {
+                options.start();
+            }
+            started = true;
+            currentTime = time - delay;
+
+            var curr = Math.min(Math.max(0.0, currentTime - startTime), duration);
+
+            easer.tick(duration === 0 ? 1 : curr / duration);
+            this.updateCurrentTransform();
+
+            if(options.update) {
+                options.update(curr / duration);
+            }
+
+            if(this.completed() && manualCallback) {
+                manualCallback();
+            }
         }
-        if(this.completed() && manualCallback) {
-          manualCallback();
-        }
-      }
     },
 
     getCurrentState : () => currentState,
@@ -100,10 +112,10 @@ function createAnimation(startState, endState, options, transformProperty) {
     },
 
     updateCurrentTransform() {
-      var tweenValue = easer.getValue();
+      let tweenValue = easer.getValue();
 
       if(manual) {
-        var value = Math.max(0.00001, manualValue - manualDelayFactor);
+        const value = Math.max(0.00001, manualValue - manualDelayFactor);
 
         if(easer.isSpring) {
           tweenValue = value;
@@ -116,22 +128,23 @@ function createAnimation(startState, endState, options, transformProperty) {
     },
 
     completed() {
-      if(startTime === 0) {
- return false;
-}
+        if(startTime === 0) {
+            return false;
+        }
       
-return easer.completed();
+        return easer.completed();
     },
 
-    updateElement(el, forceUpdate) {
-        if(!started && !forceUpdate) {
+    updateElement(node, force) {
+        if(!started && !force) {
             return;
         }
-        var matrix = tweener.asMatrix();
-        var properties = tweener.getProperties();
 
-        element.update.transform(el, matrix, transformProperty, properties.perspective, options.staticTransform);
-        element.update.properties(el, properties);
+        const matrix = tweener.asMatrix();
+        const properties = tweener.getProperties();
+
+        element.update.transform(node, matrix, transformProperty, properties.perspective, options.staticTransform);
+        element.update.properties(node, properties);
     }
   };
 }
